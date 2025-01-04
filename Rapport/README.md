@@ -1,146 +1,183 @@
-# Rapport de projet
+# Rapport de Projet IoT : ESP32CAM via MQTT
 
-# Projet ESP32CAM via MQTT
+**Auteurs :**  
+- **BOUVIER Joris**  
+- **EL BELGHITI Ismail**  
+- **MEHIELDINE Hachem**
 
-**Auteurs :**
-- BOUVIER Joris
-- EL BELGHITI Ismail
-- MEHIELDINE Hachem
+---
 
 ## Introduction
 
-Ce projet a été réalisé dans le cadre du cours d'IOT de la formation IESE de Polytech Grenoble, en 2024. 
-Ce projet vise simplement en prendre en main des outils tel que l'ESP32 caméra, le protocole MQTT, la création de noeuds sur Node-RED, et la création d'une interface web sur Node-RED Dashboard. De plus, nous avons utilisé une base de données InfluxDB pour stocker les images prises par la caméra et nous avons utilisé Grafana pour afficher ces images.
+Ce projet s'inscrit dans le cadre du cours d'IoT de la formation IESE à Polytech Grenoble en 2024. Son objectif principal est de permettre une prise en main des technologies suivantes :  
+- **ESP32-CAM** pour la capture d'images.  
+- **Protocole MQTT** pour la transmission des données.  
+- **Node-RED** pour le traitement et l'affichage des données via un tableau de bord web.  
+- **InfluxDB** pour le stockage des images.  
+- **Grafana** pour la visualisation des données.  
+
+Le projet vise à exploiter ces outils pour construire une solution complète de capture, transmission, stockage et affichage d'images.
+
+---
 
 ## Objectifs
 
-Les objectifs de ce projet sont les suivants :
-- Prendre en main l'ESP32 caméra
-- Envoyer des images prises par l'ESP32 caméra via le protocole MQTT en convertissant les images en base64
-- Créer un noeud sur Node-RED pour récupérer les images envoyées par l'ESP32 caméra et décoder les images en base64
-- Créer une interface web sur Node-RED Dashboard pour afficher les images (utilisé juste pour le test)
-- Stocker les images dans une base de données InfluxDB depuis Node-RED
-- Afficher les images stockées dans InfluxDB sur Grafana
+Les objectifs du projet sont les suivants :  
+1. Manipuler l’ESP32-CAM pour capturer des images.  
+2. Transmettre les images via MQTT en les encodant en Base64.  
+3. Créer des nœuds Node-RED pour :  
+   - Récupérer les images envoyées par MQTT.  
+   - Décoder et afficher les images.  
+   - Ajouter des contrôles pour la prise de photos et l'activation du flash.  
+4. Stocker les images dans une base de données InfluxDB.  
+5. Visualiser les images stockées dans InfluxDB via un tableau de bord Grafana.  
 
-## Matériel utilisé
+---
 
-- ESP32 caméra : ESP32-CAM
-- Raspberry Pi 3 : pour executer Mosquitto, Node-RED, InfluxDB et Grafana, le tout sur un reseau WiFi local (RaspAP)
+## Matériel Utilisé
+
+- **ESP32-CAM** : module pour la capture d'images.  
+- **Raspberry Pi 3** : utilisé pour exécuter les services suivants sur un réseau WiFi local (créé avec RaspAP) :  
+  - **Mosquitto** : broker MQTT.  
+  - **Node-RED** : environnement pour créer des flux de données.  
+  - **InfluxDB** : base de données.  
+  - **Grafana** : plateforme de visualisation de données.  
+
+---
 
 ## Réalisation
 
-### Installation des outils
+### 1. Installation des Outils
 
-Dans un premier temps, il est nécessaire de configurer le Raspberry Pi 3 pour qu'il puisse faire office de broker MQTT, de serveur Node-RED, de base de données InfluxDB et de serveur Grafana, le tout sur un réseau WiFi local.
-- RaspAP : pour créer un réseau WiFi local
-- Mosquitto : pour le broker MQTT
-- Node-RED : pour la création de noeuds
-- InfluxDB : pour la base de données
-- Grafana : pour l'affichage des données
+Les outils nécessaires ont été installés et configurés sur un Raspberry Pi 3 :  
+- **RaspAP** pour établir un réseau WiFi local.  
+- **Mosquitto** pour le broker MQTT.  
+- **Node-RED** pour le traitement des données.
+- **InfluxDB** pour le stockage des données.
+- **Grafana** pour la visualisation des données.
 
-On peut retrouver le processus d'installation de ces outils [ici](https://github.com/jorisbouvier/ESP32_Camera_Public/tree/main/RaspberryPi).
-Une fois les outils installés, on peut passer à la prise en main de ces outils.
+Les étapes détaillées d'installation sont documentées sur [GitHub](https://github.com/jorisbouvier/ESP32_Camera_Public/tree/main/RaspberryPi).
 
-### Prise en main
+---
 
-Dans cette partie, nous allons voir comment nous avons pris en main les outils suivants :
-- ESP32 caméra
-- MQTT
-- Node-RED
-- InfluxDB
-- Grafana
+### 2. Prise en Main des Outils
 
-Nous allons voir comment nous avons pris en main ces outils et comment nous les avons utilisés pour réaliser ce projet.
+#### **ESP32-CAM**  
+L'ESP32-CAM a été configurée à l'aide d’un code de base permettant de capturer des images via une interface web. [Code source](https://github.com/jorisbouvier/ESP32_Camera_Public/tree/main/ESP32%20Camera/Snippets/CameraWebServer).  
 
-#### ESP32 caméra
+![Interface Web ESP32](images/esp32_server.png)
 
-Pour prendre en main l'ESP32 caméra, nous avons utilisé le code fourni par le constructeur de l'ESP32 caméra. Ce code permet d'accéder à la caméra et de prendre des photos depuis une page web, on peut le trouver [ici](https://github.com/jorisbouvier/ESP32_Camera_Public/tree/main/ESP32%20Camera/Snippets/CameraWebServer).
+Sur cette interface, il est possible d'observer le flux vidéo en direct, de prendre des photos, et d'activer le flash, de mettre en place une reconnaissance faciale, etc.
 
-Une fois le code téléversé sur l'ESP32 caméra, nous avons pu accéder à la page web de l'ESP32 caméra et prendre des photos depuis cette page, comme le montre l'image ci-dessous.
+#### **Protocole MQTT**  
+Un premier test du protocole MQTT a été réalisé en transmettant des données simulées (valeurs de température aléatoires) depuis l’ESP32-CAM. [Code Arduino utilisé](https://github.com/jorisbouvier/ESP32_Camera_Public/tree/main/ESP32%20Camera/Snippets/ESPMQTT).  
+Nous avons ensuite utilisé MQTT explorer pour visualiser les messages envoyés.
 
-![ESP32 Server](images/esp32_server.png)
+![Messages MQTT](images/mqtt.png)
 
-Comme nous pouvons le voir sur l'image ci-dessus, nous avons accès à la caméra de l'ESP32 caméra et nous pouvons prendre des photos depuis cette page.
+#### **Node-RED**  
+Node-RED a été utilisé pour créer des flux de traitement des messages MQTT, de stockage dans InfluxDB, et d’affichage sur un tableau de bord interactif.  
 
-**MQTT**
+![Flux Node-RED](images/node-red_temp.png)
 
-Pour prendre en main MQTT, nous avons utilisé le broker Mosquitto sur le Raspberry Pi 3. Nous avons écris un code ardunio pour l'ESP32 caméra qui permet d'envoyer des informations de température via MQTT (valeur aléatoire pour le test), on peut retrouver le code [ici](https://github.com/jorisbouvier/ESP32_Camera_Public/tree/main/ESP32%20Camera/Snippets/ESPMQTT).
+Sur cette image, on peut voir le flux de traitement des données de température envoyées par l’ESP32-CAM, les données sont visibles dans le debug (à droite).
+De plus on test aussi l'envoi de messages MQTT à l'ESP32-CAM, ici on envoie sur le topic "esp32/Node_red" un horodatage lorsque l'on clique sur le bouton inject.
 
-Nous avons pu observer les informations envoyées par l'ESP32 caméra sur le broker Mosquitto, comme le montre l'image ci-dessous.
+![Flux Node-RED](images/node-red_mqtt.png)
 
-![MQTT](images/mqtt.png)
+#### **InfluxDB et Grafana**  
+Grace à l'ajoût d'un noeud InfluxDB dans Node-RED, nous avons pu stocker les données de température dans une base de données InfluxDB.
 
-Comme nous pouvons le voir sur l'image ci-dessus, nous avons accès aux informations envoyées par l'ESP32 caméra sur le broker Mosquitto, j'utilise ici MQTT Explorer pour visualiser les informations.
+![InfluxDB](images/node-red_influxdb_temp.png)
 
-**Node-RED**
+Les données envoyées par l’ESP32-CAM ont été stockées dans InfluxDB et affichées sur un tableau de bord Grafana.  
 
-Pour prendre en main Node-RED, nous avons créé un noeud qui permet de récupérer les information de température envoyées par l'ESP32 caméra via MQTT. Nous avons également créé un noeud qui publie un message (horloge) lorsque l'on clique sur un bouton, voici le flow Node-RED.
+![Grafana - Visualisation](images/grafana_temp.png)
 
-![Node-RED](images/node-red_temp.png)
+---
 
-On peut voir sur l'image ci-dessus le flow Node-RED que nous avons créé, on peut voir que l'on récupère les informations de température envoyées par l'ESP32 caméra et on les observe sur le debug. On peut également voir sur l'image suivante que l'on publie un message (horloge) dans le topic `Node_red` lorsque l'on clique sur le bouton.
+### 3. Transmission et Décodage d'Images
 
-![Node_RED MQTT](images/node-red_mqtt.png)
+#### **Transmission des Images**  
+Un code Arduino a été développé pour capturer une image avec l’ESP32-CAM, l’encoder en Base64, et l’envoyer via MQTT.  
+[Code disponible ici](https://github.com/jorisbouvier/ESP32_Camera_Public/tree/main/ESP32%20Camera/ESPMQTTCam).  
 
-**InfluxDB**
+#### **Décodage et Affichage**  
+Un flux Node-RED a été conçu pour décoder les images reçues en Base64 et les afficher sur un tableau de bord interactif (Node-RED Dashboard). Nous avons aussi ajouté des contrôles pour la prise de photos et l'activation du flash.
 
-Pour stocker les informations de température envoyées par l'ESP32 caméra dans une base de données InfluxDB, nous avons rajouté au flux Node-RED un noeud qui permet de stocker les informations dans une base de données InfluxDB, on peut voir le flow Node-RED ci-dessous.
+![Flux Node-RED Décodage](images/node-red_image.png)  
+![Tableau de Bord Node-RED](images/node-red_dashboard.png)  
 
-![Node-RED InfluxDB](images/node-red_influxdb_temp.png)
+---
 
-Comme on peut le voir sur l'image ci-dessus, on stocke les informations de température envoyées par l'ESP32 caméra dans une base de données InfluxDB.
+### 4. Stockage et Visualisation des Images
 
-![InfluxDB](images/influxdb_temp.png)
+Les images décodées ont été stockées dans une base de données InfluxDB via Node-RED, puis affichées dans un tableau de bord Grafana.  
 
-**Grafana**
+![Node-RED vers InfluxDB](images/node-red_influxdb.png)  
+![Grafana - Images](images/grafana.png)
 
-Pour afficher les informations de température stockées dans InfluxDB sur Grafana, nous avons créé un dashboard Grafana qui permet d'afficher les informations stockées dans InfluxDB, on peut voir le dashboard Grafana ci-dessous.
+Maintenant, nous pouvons visualiser les images prises par l'ESP32-CAM sur le tableau de bord Grafana et grace à InfluxDB nous avons un historique des images prises.
 
-![Grafana](images/grafana_temp.png)
+---
 
-Comme on peut le voir sur l'image ci-dessus, on affiche les informations de température stockées dans InfluxDB sur Grafana.
+## Analyses
 
-### ESP32 caméra + MQTT
+### Domaines d’Application
+- **Surveillance** : gestion à distance de caméras.  
+- **Sécurité** : contrôle d’accès et monitoring.  
+- **Domotique** : gestion de dispositifs connectés.  
+- **Santé** : suivi à distance des patients.  
+- **Industrie** : supervision des machines.  
 
-Pour envoyer des images prises par l'ESP32 caméra via MQTT, nous repris un code qui permet de prendre une photo et de l'envoyer via MQTT lorsque l'on publie un message sur un topic MQTT, on peut retrouver le code [ici](https://github.com/jorisbouvier/ESP32_Camera_Public/tree/main/ESP32%20Camera/Snippets/SCW_Photobooth).
+### Avantages
+- Facilité d’utilisation et d’intégration.  
+- Modularité et extensibilité du système.  
+- Coût relativement faible.  
 
-Nous avons donc modifié ce code afin de convertir les images en base64 avant de les envoyer via MQTT, on peut retrouver le code modifié [ici](https://github.com/jorisbouvier/ESP32_Camera_Public/tree/main/ESP32%20Camera/ESPMQTTCam).
+### Limites
+- Résolution limitée des images de l’ESP32-CAM.  
 
-Une fois le code téléversé sur l'ESP32 caméra, nous avons pu envoyer des images prises par l'ESP32 caméra via MQTT, comme le montre l'image ci-dessous.
+### Améliorations Potentielles
+- Amélioration de la qualité des images. 
+    - Utilisation d’une caméra externe.
+    - Compression des images.
+- Intégration de nouvelles fonctionnalités comme :  
+  - Détection de mouvement.  
+  - Reconnaissance faciale ou d’objets.  
 
-![MQTT Image](images/mqtt_image.png)
 
-Comme nous pouvons le voir sur l'image ci-dessus, que nous avons accès aux messages envoyés par l'ESP32 caméra sur le broker Mosquitto, on peut voir que l'on reçoit des messages, mais pour l'instant on ne peut pas les lire car ce sont des images en base64.
+### Fiche ACV
 
-### Node-RED + Base64
+| Critère | Valeur |
+| --- | --- |
+| Durée de vie | 5 ans |
+| Durée d'utilisation | 24h/jour |
+| Consommation électrique | 5W |
+| Coût de fabrication | 10€ |
+| Coût de maintenance | 10€/an |
+| Coût de recyclage | 5€ |
+| Coût de fin de vie | 5€ |
+| Impact environnemental | Faible |
+| Impact social | Faible |
+| Impact économique | Faible |
 
-Pour décoder les images en base64 reçues par MQTT, nous avons créé un noeud qui permet de décoder les images en base64 et de les afficher sur le dashboard de Node-RED, de plus j'ai ajouté deux boutons pour prendre une photo et un autre pour allumer le flash lors de la prise de photo. Le tout sur un dashboard Node-RED, voici le flow Node-RED et le dashboard.
+### Fiche Security & Privacy
 
-![Node-RED Image](images/node-red_image.png)
-![Node-RED Dashboard](images/node-red_dashboard.png)
-
-On peut voir sur l'image ci-dessus le flow Node-RED que nous avons créé, on peut voir que l'on décoder les images en base64 reçues par MQTT et on les affiche sur le dashboard de Node-RED. On peut également voir que l'on peut prendre une photo et allumer le flash grace aux boutons.
-
-### InfluxDB
-
-Pour stocker les images prises par l'ESP32 caméra dans une base de données InfluxDB, nous avons rajouté au flux Node-RED un noeud qui permet de stocker les images dans une base de données InfluxDB, on peut voir le flow Node-RED ci-dessous.
-
-![Node-RED InfluxDB](images/node-red_influxdb.png)
-
-Comme on peut le voir sur l'image ci-dessus, on stocke les images prises par l'ESP32 caméra dans une base de données InfluxDB.
-
-### Grafana
-
-Pour afficher les images stockées dans InfluxDB sur Grafana, nous avons créé un dashboard Grafana qui permet d'afficher les images stockées dans InfluxDB, on peut voir le dashboard Grafana ci-dessous.
-
-![Grafana](images/grafana.png)
-
-Comme on peut le voir sur l'image ci-dessus, on affiche les images stockées dans InfluxDB sur Grafana.
+| Critère | Valeur |
+| --- | --- |
+| Confidentialité | Moyen |
+| Intégrité | Moyen |
+| Disponibilité | Moyen |
+| Authentification | Moyen |
+| Autorisation | Moyen |
+| Non-répudiation | Moyen |
+| Sécurité des données | Moyen |
+| Sécurité des communications | Moyen |
+| Sécurité des systèmes | Moyen |
+| Sécurité physique | Moyen |
+---
 
 ## Conclusion
 
-Ce projet nous a permis de prendre en main des outils tels que l'ESP32 caméra, le protocole MQTT, la création de noeuds sur Node-RED, la création d'une interface web sur Node-RED Dashboard, la base de données InfluxDB et Grafana. Nous avons pu envoyer des images prises par l'ESP32 caméra via MQTT, décoder les images en base64 reçues par MQTT, stocker les images dans une base de données InfluxDB et afficher les images stockées dans InfluxDB sur Grafana.
-Ce projet nous a permis de mieux comprendre le fonctionnement de ces outils et de mieux les maîtriser, ici la démonstration est simple mais elle peut être améliorée pour des applications plus complexes, comme par exemple la détection de mouvement, la reconnaissance faciale, etc.
-
-
-
+Ce projet a permis de maîtriser des technologies variées et de construire une solution fonctionnelle de capture, transmission, stockage et affichage d’images. Bien qu’il s’agisse d’un projet d’introduction, les outils et méthodes explorés offrent des perspectives intéressantes pour des applications plus complexes.  
