@@ -76,7 +76,7 @@ Nous avons ensuite utilisé MQTT explorer pour visualiser les messages envoyés.
 ![Messages MQTT](images/mqtt.png)
 
 #### **Node-RED**  
-Node-RED a été utilisé pour créer des flux de traitement des messages MQTT, de stockage dans InfluxDB, et d’affichage sur un tableau de bord interactif.  
+Un premier flux Node-RED a été créé pour traiter les données de température envoyées via MQTT par l’ESP32-CAM.
 
 ![Flux Node-RED](images/node-red_temp.png)
 
