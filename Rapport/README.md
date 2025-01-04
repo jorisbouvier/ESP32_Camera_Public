@@ -76,25 +76,27 @@ Comme nous pouvons le voir sur l'image ci-dessus, nous avons accès aux informat
 
 Pour prendre en main Node-RED, nous avons créé un noeud qui permet de récupérer les information de température envoyées par l'ESP32 caméra via MQTT. Nous avons également créé un noeud qui publie un message (horloge) lorsque l'on clique sur un bouton, voici le flow Node-RED.
 
-![Node-RED](images/node-red.png)
+![Node-RED](images/node-red_temp.png)
 
-On peut voir sur l'image ci-dessus le flow Node-RED que nous avons créé, on peut voir que l'on récupère les informations de température envoyées par l'ESP32 caméra et on les observe sur le debug. On peut également voir que l'on publie un message (horloge) lorsque l'on clique sur le bouton inject.
+On peut voir sur l'image ci-dessus le flow Node-RED que nous avons créé, on peut voir que l'on récupère les informations de température envoyées par l'ESP32 caméra et on les observe sur le debug. On peut également voir sur l'image suivante que l'on publie un message (horloge) dans le topic `Node_red` lorsque l'on clique sur le bouton.
+
+![Node_RED MQTT](images/node-red_mqtt.png)
 
 **InfluxDB**
 
 Pour stocker les informations de température envoyées par l'ESP32 caméra dans une base de données InfluxDB, nous avons rajouté au flux Node-RED un noeud qui permet de stocker les informations dans une base de données InfluxDB, on peut voir le flow Node-RED ci-dessous.
 
-![Node-RED InfluxDB](images/node-red_influxdb.png)
+![Node-RED InfluxDB](images/node-red_influxdb_temp.png)
 
 Comme on peut le voir sur l'image ci-dessus, on stocke les informations de température envoyées par l'ESP32 caméra dans une base de données InfluxDB.
 
-![InfluxDB](images/influxdb.png)
+![InfluxDB](images/influxdb_temp.png)
 
 **Grafana**
 
 Pour afficher les informations de température stockées dans InfluxDB sur Grafana, nous avons créé un dashboard Grafana qui permet d'afficher les informations stockées dans InfluxDB, on peut voir le dashboard Grafana ci-dessous.
 
-![Grafana](images/grafana.png)
+![Grafana](images/grafana_temp.png)
 
 Comme on peut le voir sur l'image ci-dessus, on affiche les informations de température stockées dans InfluxDB sur Grafana.
 
@@ -126,8 +128,6 @@ Pour stocker les images prises par l'ESP32 caméra dans une base de données Inf
 ![Node-RED InfluxDB](images/node-red_influxdb.png)
 
 Comme on peut le voir sur l'image ci-dessus, on stocke les images prises par l'ESP32 caméra dans une base de données InfluxDB.
-
-![InfluxDB](images/influxdb.png)
 
 ### Grafana
 
