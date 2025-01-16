@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Présentation ESP32 Caméra</title>
+
+	<link rel="stylesheet" href="reveal/dist/reset.css">
+	<link rel="stylesheet" href="reveal/dist/reveal.css">
+	<link rel="stylesheet" href="reveal/dist/theme/dracula.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="reveal/plugin/highlight/monokai.css">
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+
+			<!-- Slide 1 -->
+			<section>
+				<h1>Projet IoT</h1>
+				<h2>ESP32CAM via MQTT</h2>
+				<img src="images/ESP32CAM.jpg" alt="ESP32-CAM" style="max-width: 20%;">
+				<p>Auteurs : Joris Bouvier, Ismail El Belghiti, Hachem Mehieldine</p>
+			</section>
+
+			<!-- Slide 2 -->
+			<section>
+				<h2>Introduction</h2>
+				<ul>
+					<li>Utilisation de l'ESP32-CAM pour la capture d'images</li>
+					<li>Transmission via le protocole MQTT</li>
+					<li>Traitement et affichage avec Node-RED</li>
+					<li>Stockage avec InfluxDB</li>
+					<li>Visualisation des données avec Grafana</li>
+				</ul>
+			</section>
+
+			<!-- Slide 3 -->
+			<section>
+				<h2>Objectifs</h2>
+				<ol>
+					<li>Capturer des images avec l’ESP32-CAM</li>
+					<li>Envoyer les images encodées en Base64 via MQTT</li>
+					<li>Créer des flux Node-RED pour traitement et affichage</li>
+					<li>Stocker les images dans InfluxDB</li>
+					<li>Visualiser les données avec Grafana</li>
+				</ol>
+			</section>
+
+			<!-- Slide 4 -->
+			<section>
+				<h2>Matériel Utilisé</h2>
+				<ul>
+					<li>ESP32-CAM : module de capture d'images</li>
+					<li>Raspberry Pi 3 : serveur pour WiFi, MQTT, Node-RED, InfluxDB, et Grafana</li>
+				</ul>
+				<img src="images/ESP32CAM.jpg" alt="ESP32-CAM" style="max-width: 20%;">
+				<img src="images/raspberry.jpeg" alt="Raspberry Pi" style="max-width: 30%;">
+			</section>
+
+			<!-- Slide 5 -->
+			<section>
+				<h2>Réalisation</h2>
+				<h3>1. Installation des Outils</h3>
+				<ul>
+					<li>Configuration sur Raspberry Pi 3 :</li>
+					<ul>
+						<li>RaspAP pour un réseau WiFi local</li>
+						<li>Mosquitto : broker MQTT</li>
+						<li>Node-RED : flux de données</li>
+						<li>InfluxDB : stockage des données</li>
+						<li>Grafana : visualisation des données</li>
+					</ul>
+					<li>Documentation détaillée disponible sur <a
+							href="https://github.com/jorisbouvier/ESP32_Camera_Public/tree/main/RaspberryPi"
+							target="_blank">GitHub</a>.</li>
+				</ul>
+			</section>
+
+			<!-- Slide 6 -->
+			<section>
+				<h3>2. Prise en Main des Outils</h3>
+				<h4>ESP32-CAM</h4>
+				<ul>
+					<li>Configuration pour capturer des images via une interface web.</li>
+					<li>Fonctionnalités : capture de photos, flash, flux vidéo, reconnaissance faciale.</li>
+				</ul>
+				<img src="images/esp32_server.png" alt="Interface ESP32-CAM" style="max-width: 50%; margin-top: 20px;">
+			</section>
+
+			<!-- Slide 7 -->
+			<section>
+				<h4>Protocole MQTT</h4>
+				<ul>
+					<li>Transmission de données via Mosquitto.</li>
+					<li>Visualisation des messages avec MQTT Explorer.</li>
+				</ul>
+				<img src="images/mqtt.png" alt="Messages MQTT" style="max-width: 50%; margin-top: 20px;">
+			</section>
+
+			<!-- Slide 8 -->
+			<section>
+				<h4>Node-RED</h4>
+				<ul>
+					<li>Création d'un flux pour traiter les données transmises via MQTT.</li>
+					<li>Envoi de messages MQTT pour interagir avec l’ESP32-CAM.</li>
+				</ul>
+				<img src="images/node-red_temp.png" alt="Flux Node-RED" style="max-width: 50%; margin-top: 20px;">
+				<img src="images/node-red_mqtt.png" alt="Messages MQTT Node-RED"
+					style="max-width: 40%; margin-top: 20px;">
+			</section>
+
+			<!-- Slide 9 -->
+			<section>
+				<h3>3. Transmission et Décodage d'Images</h3>
+				<h4>Transmission</h4>
+				<ul>
+					<li>Code Arduino pour capturer et encoder les images en Base64.</li>
+					<li>Envoi des images via MQTT.</li>
+				</ul>
+			</section>
+
+			<!-- Slide 10 -->
+			<section>
+				<h4>Décodage et Affichage</h4>
+				<ul>
+					<li>Flux Node-RED pour décoder les images et les afficher sur un tableau de bord.</li>
+					<li>Ajout de contrôles pour prise de photos et activation du flash.</li>
+				</ul>
+				<img src="images/node-red_image.png" alt="Décodage d'Images Node-RED"
+					style="max-width: 60%; margin-top: 20px;">
+				<img src="images/node-red_dashboard.png" alt="Tableau de Bord Node-RED"
+					style="max-width: 20%; margin-top: 20px;">
+			</section>
+
+			<!-- Slide 11 -->
+			<section>
+				<h3>4. Stockage et Visualisation</h3>
+				<ul>
+					<li>Images stockées dans InfluxDB via Node-RED.</li>
+					<li>Affichage des images sur un tableau de bord Grafana.</li>
+				</ul>
+				<img src="images/node-red_influxdb.png" alt="Décodage d'Images Node-RED"
+					style="max-width: 50%; margin-top: 20px;">
+				<img src="images/grafana.png" alt="Visualisation Grafana" style="max-width: 40%; margin-top: 20px;">
+			</section>
+			<!-- Slide 12 -->
+			<section>
+				<h3>Domaines d'Application</h3>
+				<ul>
+					<li><strong>Surveillance</strong> : gestion à distance des caméras.</li>
+					<li><strong>Sécurité</strong> : contrôle d'accès et monitoring.</li>
+					<li><strong>Domotique</strong> : gestion de dispositifs connectés.</li>
+					<li><strong>Santé</strong> : suivi à distance des patients.</li>
+					<li><strong>Industrie</strong> : supervision des machines.</li>
+				</ul>
+			</section>
+
+			<!-- Slide 13 -->
+			<section>
+				<h3>Avantages</h3>
+				<ul>
+					<li>Facilité d’utilisation et d’intégration.</li>
+					<li>Modularité et extensibilité du système.</li>
+					<li>Coût relativement faible.</li>
+				</ul>
+			</section>
+
+			<!-- Slide 14 -->
+			<section>
+				<h3>Limites</h3>
+				<ul>
+					<li>Résolution limitée des images capturées par l’ESP32-CAM.</li>
+					<li>Dépendance aux connexions réseau pour la transmission des données.</li>
+				</ul>
+			</section>
+
+			<!-- Slide 15 -->
+			<section>
+				<h3>Améliorations Potentielles</h3>
+				<ul>
+					<li>Amélioration de la qualité des images :
+						<ul>
+							<li>Compression d'images.</li>
+							<li>Utilisation d’une autre caméra.</li>
+						</ul>
+					</li>
+					<li>Ajout de nouvelles fonctionnalités :
+						<ul>
+							<li>Détection de mouvement.</li>
+							<li>Reconnaissance faciale ou d’objets.</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+
+			<!-- Slide 16 -->
+			<section>
+				<h2>Conclusion</h2>
+				<ul>
+					<li><strong>Technologies explorées :</strong> ESP32-CAM, MQTT, Node-RED, InfluxDB, Grafana.</li>
+					<li><strong>Objectifs atteints :</strong> Capture, transmission, stockage, affichage d’images.</li>
+					<li><strong>Points forts :</strong> Facilité, modularité, coût réduit.</li>
+					<li><strong>Applications :</strong> Surveillance, sécurité, domotique, santé, industrie.</li>
+					<li><strong>Perspectives :</strong> Améliorations de la qualité, ajout de fonctionnalités avancées.
+					</li>
+				</ul>
+			</section>
+		</div>
+	</div>
+
+	<script src="reveal/dist/reveal.js"></script>
+	<script src="reveal/plugin/notes/notes.js"></script>
+	<script src="reveal/plugin/markdown/markdown.js"></script>
+	<script src="reveal/plugin/highlight/highlight.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			hash: true,
+
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+		});
+	</script>
+</body>
+
+</html>
