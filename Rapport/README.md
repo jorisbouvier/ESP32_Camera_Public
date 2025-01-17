@@ -2,7 +2,7 @@
 
 **Auteurs :**  
 - **BOUVIER Joris**  
-- **EL BELGHITI Ismail**  
+- **ELBELGHITI ALAOUI Ismail**  
 - **MEHIELDINE Hachem**
 
 ---
